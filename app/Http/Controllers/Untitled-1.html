@@ -1,0 +1,61 @@
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Dashboard') }}</div>
+
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        
+                        <h1>Welcome, {{ Auth::user()->name }}</h1>
+
+                        <!-- Create Event Button -->
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#createEventModal">Create Event</button>
+
+                        <!-- Choose Event Dropdown -->
+                        <div class="form-group mt-3">
+                            <label for="eventDropdown">Choose Event:</label>
+                            <select class="form-control" id="eventDropdown">
+                                <option value="">Select an Event</option>
+                                @foreach ($events as $event)
+                                    <option value="{{ $event->id }}">{{ $event->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div class="modal fade" id="createEventModal" tabindex="-1" role="dialog" aria-labelledby="createEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createEventModalLabel">Create Event</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('admin.events.store') }}">
+                        @csrf
+                        <!-- Add input fields for event details (name, year, dates, etc.) -->
+                        <button type="submit" class="btn btn-primary">Create Event</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
